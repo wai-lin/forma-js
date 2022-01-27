@@ -10,6 +10,11 @@
     "@types/node": "^16.11.21",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "graphql": "^16.3.0",
+    "graphql.macro": "^1.4.2",
+    "multer": "^1.4.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
@@ -17,6 +22,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "testServer": "node ./src/test.server.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
