@@ -1,0 +1,11 @@
+{
+  "name": "@examples/components",
+  "version": "0.1.0",
+  "main": "index.tsx",
+  "scripts": {},
+  "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "react": "^17.0.2"
+  }
+}
