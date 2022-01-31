@@ -1,13 +1,15 @@
 import * as React from 'react'
-import { JsonPretty, Button, FormControl } from '@examples/components'
 
+import { JsonPretty, Button, FormControl } from '../components'
 import { Form } from '@platform-form/react'
 
-function App() {
+export function Basic() {
   const [requestRoute, setRequestRoute] = React.useState('/random')
 
   return (
-    <main>
+    <>
+      <h4>Basic Form</h4>
+
       <div>
         <p>Select route to fetch</p>
         <select
@@ -27,8 +29,6 @@ function App() {
           </li>
         </ul>
       </div>
-
-      <div>|</div>
 
       <Form method="post" action={`http://localhost:4000${requestRoute}`}>
         {({ data, error, status, transition }) => (
@@ -58,8 +58,6 @@ function App() {
           </>
         )}
       </Form>
-    </main>
+    </>
   )
 }
-
-export default App

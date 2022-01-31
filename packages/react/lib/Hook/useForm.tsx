@@ -1,35 +1,47 @@
-import type { FormProps } from '../types'
-
 import * as React from 'react'
-import { useFetch } from '../Hook/useFetch'
+
+import { useFetch, UseFetchParams } from './useFetch'
+import { FormProps, UseFormReturnType } from '../types'
 
 /**
- * The request headers and body will be generated base on the `encType` and `reqBody`.
- * `formData` will be serialized to appropriate `body` type based on `encType` value.
+ * hook to bind to the `form` element
  *
- * When `reqBody` is not empty, the `Content-Type` header will be set to `application/json` by force
- * and `reqBody` will be used as the `body`. So the `reqBody` needs to be a valid JSON string.
+ * `eg.`
+ *
+ * ```tsx
+ * const loginForm = useForm({...config})
+ * const loginFormProps = { ref: loginForm.ref, onSubmit: loginForm.onSubmit }
+ * return (
+ *   <form {...loginFormProps}>
+ *     <input name="email" type="email" />
+ *     <input name="password" type="password" />
+ *     <button type="submit">Submit</button>
+ *   </form>
+ * )
+ * ```
  */
-export function Form<DataType, ErrorType>({
-  method = 'post',
-  action = '/',
-  encType = 'multipart/form-data',
-  query = '',
-  hook,
-  body,
-  includeSubmitValue = true,
-  children,
-}: FormProps<DataType, ErrorType> &
-  Omit<
-    React.FormHTMLAttributes<HTMLFormElement>,
-    'method' | 'encType' | 'action'
-  >) {
-  /** initialize form ref */
+export function useForm<DataType, ErrorType>(
+  config: FormProps<DataType, ErrorType>,
+): UseFormReturnType<DataType, ErrorType> {
+  /** initialize formRef */
   const form = React.useRef<HTMLFormElement | null>(null)
 
   /** initialize formData */
   const formData = React.useRef<FormData>(
     new FormData(form.current || undefined),
+  )
+
+  /** memoized config */
+  const useFetchConfig = React.useMemo<UseFetchParams<DataType, ErrorType>>(
+    () => ({
+      action: config.action || '',
+      method: config.method || 'post',
+      formData: formData.current || undefined,
+      encType: config.encType || 'application/x-www-form-urlencoded',
+      query: config.query || '',
+      hook: config.hook || undefined,
+    }),
+    [config],
   )
 
   const {
@@ -42,17 +54,9 @@ export function Form<DataType, ErrorType>({
     status,
     transition,
     abortRequest,
-  } = useFetch<DataType, ErrorType>({
-    action,
-    method,
-    formData: formData.current,
-    encType,
-    query,
-    hook,
-    body,
-  })
+  } = useFetch<DataType, ErrorType>(useFetchConfig)
 
-  /** onSubmit handler */
+  /** submit handler */
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
@@ -65,7 +69,7 @@ export function Form<DataType, ErrorType>({
     const submitter = (e.nativeEvent as any).submitter as HTMLButtonElement
     formData.current = new FormData(e.currentTarget)
     if (
-      includeSubmitValue &&
+      config.includeSubmitValue &&
       submitter.hasAttribute('name') &&
       submitter.hasAttribute('value')
     ) {
@@ -95,15 +99,13 @@ export function Form<DataType, ErrorType>({
     }
   }
 
-  return (
-    <form
-      ref={form}
-      method={method}
-      action={action}
-      encType={encType}
-      onSubmit={submitHandler}
-    >
-      {children({ data, error, status, transition, abort: abortRequest })}
-    </form>
-  )
+  return {
+    ref: form,
+    data,
+    error,
+    status,
+    transition,
+    onSubmit: submitHandler,
+    abort: abortRequest,
+  }
 }

@@ -1,17 +1,15 @@
 {
-  "name": "@platform-form/react",
+  "name": "@forma-js/react",
   "version": "0.1.0",
   "files": [
     "dist",
     "lib"
   ],
-  "main": "dist/platform-form-react.umd.js",
-  "module": "dist/platform-form-react.es.js",
+  "main": "dist/forma-js-react.umd.js",
+  "module": "dist/forma-js-react.es.js",
   "typings": "dist/types/main.d.ts",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build && npm run type:gen",
-    "preview": "vite preview",
+    "build": "vite build && npm run type:gen",
     "type:gen": "tsc --emitDeclarationOnly --project tsconfig.json --outDir dist/types"
   },
   "dependencies": {

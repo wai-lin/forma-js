@@ -8,8 +8,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, 'lib/main.ts'),
-      name: '@platform-form/react',
-      fileName: (format) => `platform-form-react.${format}.js`,
+      name: '@forma-js/react',
+      fileName: (format) => `forma-js-react.${format}.js`,
     },
     rollupOptions: {
       external: ['react', 'react-dom'],

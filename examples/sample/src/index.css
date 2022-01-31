@@ -11,10 +11,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+header,
 main {
   width: clamp(80%, 100%, 40vw);
   margin: 0 auto;
+}
+
+main {
   padding-bottom: 40vh;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ccc;
 }
 
 form button {

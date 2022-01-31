@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "importHelpers": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "jsx": "react-jsx"
   }
