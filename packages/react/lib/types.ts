@@ -1,3 +1,5 @@
+import * as React from 'react'
+
 export type Method = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'graphql'
 
 export type EncType =
@@ -26,6 +28,7 @@ export type LifeCycleFuncs<DataType, ErrorType> = {
    * RequestInit object is passed as argument so that it can be modified before
    * making the request. All the options except `signal` is mutable for the RequestInit.
    */
+  // eslint-disable-next-line no-undef
   beforeRequest?: (init: Omit<RequestInit, 'signal'>) => void
   /**
    * Called after fetch request whether it's `failed` or `success`.

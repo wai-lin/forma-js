@@ -1,10 +1,9 @@
-import * as React from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 
-import { Basic } from './examples/basic'
-import { GlobalConfig } from './examples/global-config'
-import { Graphql } from './examples/graphql'
-import { HookForm } from './examples/hook'
+import { Basic } from './routes/basic'
+import { GlobalConfig } from './routes/global-config'
+import { Graphql } from './routes/graphql'
+import { HookForm } from './routes/hook'
 
 function App() {
   return (

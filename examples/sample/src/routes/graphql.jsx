@@ -1,6 +1,5 @@
-import * as React from 'react'
 import { JsonPretty, FormControl, Button } from '../components'
-import { Form } from '@platform-form/react'
+import { Form } from '@forma-js/react'
 
 export function Graphql() {
   return (
@@ -34,7 +33,7 @@ export function Graphql() {
 
               <FormControl>
                 <label htmlFor="name">Your Name</label>
-                <input id="name" name="password" />
+                <input id="name" name="name" />
               </FormControl>
 
               <Button type="submit">Create</Button>

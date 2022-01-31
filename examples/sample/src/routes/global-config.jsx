@@ -1,10 +1,9 @@
-import * as React from 'react'
 import { JsonPretty, FormControl, Button } from '../components'
-import { Form, ConfigProvider } from '@platform-form/react'
+import { Form, ConfigProvider } from '@forma-js/react'
 
 export function ChildForm() {
   return (
-    <Form action="/users">
+    <Form action="/users?">
       {({ data, error, status, transition }) => (
         <>
           <JsonPretty json={{ state: transition.state, status, data, error }} />

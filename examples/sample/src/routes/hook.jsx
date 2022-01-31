@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { JsonPretty, Button, FormControl } from '../components'
-import { useForm } from '@platform-form/react'
+import { useForm } from '@forma-js/react'
 
 export function HookForm() {
   const [requestRoute, setRequestRoute] = React.useState('/random?')

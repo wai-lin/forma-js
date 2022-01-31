@@ -8,7 +8,7 @@ import type {
 } from '../types'
 
 import * as React from 'react'
-import { createRequestInit } from '../Form/createRequestInit'
+import { createRequestInit } from '../utils/createRequestInit'
 import { useConfig } from '../ConfigProvider/ConfigProvider'
 
 export interface UseFetchParams<DataType, ErrorType> {
@@ -79,7 +79,7 @@ export function useFetch<DataType, ErrorType>({
       const reqAction = baseConfig.baseUrl
         ? `${baseConfig.baseUrl}${action}`
         : action
-      let { url, requestInit } = createRequestInit({
+      const { url, requestInit } = createRequestInit({
         action: reqAction,
         baseConfig,
         method,

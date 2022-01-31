@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import PropTypes from 'prop-types'
 
 const Pre = styled.pre({
   padding: '20px',
@@ -11,7 +12,7 @@ const Pre = styled.pre({
   fontSize: '12px',
 })
 
-export const JsonPretty: React.FC<{ json: any }> = ({ json = {} }) => {
+export const JsonPretty = ({ json = {} }) => {
   return (
     <Pre>
       Result
@@ -20,6 +21,9 @@ export const JsonPretty: React.FC<{ json: any }> = ({ json = {} }) => {
       {JSON.stringify(json, null, 2)}
     </Pre>
   )
+}
+JsonPretty.propTypes = {
+  json: PropTypes.object,
 }
 
 export const Button = styled.button({

@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { JsonPretty, Button, FormControl } from '../components'
-import { Form } from '@platform-form/react'
+import { Form } from '@forma-js/react'
 
 export function Basic() {
   const [requestRoute, setRequestRoute] = React.useState('/random')

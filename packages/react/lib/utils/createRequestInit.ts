@@ -1,4 +1,4 @@
-import { Config, EncType, Method } from '../types'
+import type { Config, EncType, Method } from '../types'
 
 interface CreateRequestInitParams {
   action: string
@@ -20,14 +20,14 @@ interface CreateRequestInitParams {
 export function createRequestInit({
   action,
   baseConfig,
-  method = 'post',
+  method,
   encType,
   formData,
   reqBody,
   query = '',
 }: CreateRequestInitParams) {
   // set default `headers` value
-  let headers: any = {}
+  const headers: any = {}
   // set default `body` value as `formData`
   let body: FormData | string | undefined = formData
   // define request params
@@ -53,7 +53,7 @@ export function createRequestInit({
   if (reqEncType === 'application/x-www-form-urlencoded') {
     headers['Content-Type'] = `${reqEncType};charset=UTF-8`
     const query = new URLSearchParams()
-    for (let entity of formData.entries()) {
+    for (const entity of formData.entries()) {
       query.append(entity[0], entity[1].toString())
     }
     body = query
@@ -67,7 +67,7 @@ export function createRequestInit({
   if (reqEncType === 'application/json') {
     headers['Content-Type'] = `${reqEncType};charset=UTF-8`
     const json: any = {}
-    for (let entity of formData.entries()) {
+    for (const entity of formData.entries()) {
       json[entity[0]] = entity[1].toString()
     }
     body = JSON.stringify(json)
@@ -91,7 +91,7 @@ export function createRequestInit({
   if (method === 'graphql') {
     headers['Content-Type'] = 'application/json;charset=UTF-8'
     const variables: any = {}
-    for (let entity of formData.entries()) {
+    for (const entity of formData.entries()) {
       variables[entity[0]] = entity[1].toString()
     }
     body = JSON.stringify({ query, variables })
@@ -105,20 +105,23 @@ export function createRequestInit({
   if (requestMethod === 'get') {
     body = undefined
     const params = new URLSearchParams()
-    for (let entity of formData.entries()) {
+    for (const entity of formData.entries()) {
       params.append(entity[0], entity[1].toString())
     }
     requestParam = params.toString()
   }
 
   /** Prepare the request init object */
+  // eslint-disable-next-line no-undef
   const requestInit: RequestInit = {
     method: requestMethod,
     headers,
   }
 
   /** Request URL */
-  const url = `${action}${requestParam}`
+  const url = baseConfig.baseUrl
+    ? `${baseConfig.baseUrl}${action}${requestParam}`
+    : `${action}${requestParam}`
 
   // if requestMethod is not `get`, set `body` to the request init object
   if (requestMethod !== 'get') requestInit.body = body
