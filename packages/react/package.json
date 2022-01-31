@@ -1,4 +1,9 @@
 {
+  "homepage": "https://github.com/wai-lin/forma-js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wai-lin/forma-js"
+  },
   "name": "@forma-js/react",
   "version": "1.0.0",
   "files": [
