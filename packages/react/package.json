@@ -1,0 +1,26 @@
+{
+  "name": "@forma-js/react",
+  "version": "0.1.0",
+  "files": [
+    "dist",
+    "lib"
+  ],
+  "main": "dist/forma-js-react.umd.js",
+  "module": "dist/forma-js-react.es.js",
+  "typings": "dist/types/main.d.ts",
+  "scripts": {
+    "build": "vite build && npm run type:gen",
+    "type:gen": "tsc --emitDeclarationOnly --project tsconfig.json --outDir dist/types"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.33",
+    "@types/react-dom": "^17.0.10",
+    "@vitejs/plugin-react": "^1.0.7",
+    "typescript": "^4.4.4",
+    "vite": "^2.7.2"
+  }
+}
