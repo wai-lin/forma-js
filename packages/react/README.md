@@ -427,6 +427,7 @@ type ChildrenProps<DataType, ErrorType> = {
 }
 
 type FormProps<DataType, ErrorType> = {
+  useBaseConfig?: boolean
   action: string
   method: Method
   encType?: EncType
