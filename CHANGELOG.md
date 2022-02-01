@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.5](https://github.com/wai-lin/forma-js/compare/v1.0.4...v1.0.5) (2022-02-01)
+
+
+### Bug Fixes
+
+* **build:** rebuild bug fix on publish ([3fae8b5](https://github.com/wai-lin/forma-js/commit/3fae8b5e8df7ebc422157db86f55cc869ba723aa))
+
 ### [1.0.4](https://github.com/wai-lin/forma-js/compare/v1.1.0...v1.0.4) (2022-02-01)
 
 ### [1.0.3](https://github.com/wai-lin/forma-js/compare/v1.0.1-0...v1.0.3) (2022-01-31)
