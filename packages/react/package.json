@@ -18,7 +18,8 @@
     "build": "vite build && npm run type:gen",
     "type:gen": "tsc --emitDeclarationOnly --project tsconfig.json --outDir dist/types",
     "v:bump": "standard-version",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "publish": "npm publish --access public"
   },
   "dependencies": {
     "react": "^17.0.2",
