@@ -12,6 +12,7 @@ import { createRequestInit } from '../utils/createRequestInit'
 import { useConfig } from '../ConfigProvider/ConfigProvider'
 
 export interface UseFetchParams<DataType, ErrorType> {
+  useBaseConfig?: boolean
   action: string
   method: Method
   encType: EncType
@@ -26,6 +27,7 @@ export interface UseFetchParams<DataType, ErrorType> {
  * AbortController is also implemented to cancel the simultaneous fetch request.
  */
 export function useFetch<DataType, ErrorType>({
+  useBaseConfig = true,
   action,
   method,
   formData,
@@ -80,6 +82,7 @@ export function useFetch<DataType, ErrorType>({
         ? `${baseConfig.baseUrl}${action}`
         : action
       const { url, requestInit } = createRequestInit({
+        useBaseConfig,
         action: reqAction,
         baseConfig,
         method,

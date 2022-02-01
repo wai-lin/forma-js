@@ -1,6 +1,7 @@
 import type { Config, EncType, Method } from '../types'
 
 interface CreateRequestInitParams {
+  useBaseConfig?: boolean
   action: string
   baseConfig: Config
   method?: Method
@@ -18,6 +19,7 @@ interface CreateRequestInitParams {
  * and `reqBody` will be used as the `body`. So the `reqBody` needs to be a valid JSON string.
  */
 export function createRequestInit({
+  useBaseConfig = true,
   action,
   baseConfig,
   method,
@@ -34,16 +36,21 @@ export function createRequestInit({
   let requestParam = ''
 
   /** define request `encType` */
-  const reqEncType =
+  let reqEncType =
     encType || baseConfig.encType || 'application/x-www-form-urlencoded'
 
   /** define request `method` */
-  const requestMethod: Method =
+  let requestMethod: Method =
     method === 'graphql'
       ? 'post'
       : method === undefined && baseConfig.method === 'graphql'
       ? 'post'
       : method || baseConfig.method || 'get'
+
+  if (!useBaseConfig) {
+    reqEncType = encType || 'application/x-www-form-urlencoded'
+    requestMethod = method || 'post'
+  }
 
   /**
    * if `encType` is `application/x-www-form-urlencoded`,
@@ -119,9 +126,11 @@ export function createRequestInit({
   }
 
   /** Request URL */
-  const url = baseConfig.baseUrl
+  let url = baseConfig.baseUrl
     ? `${baseConfig.baseUrl}${action}${requestParam}`
     : `${action}${requestParam}`
+
+  if (!useBaseConfig) url = `${action}${requestParam}`
 
   // if requestMethod is not `get`, set `body` to the request init object
   if (requestMethod !== 'get') requestInit.body = body

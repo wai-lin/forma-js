@@ -124,3 +124,21 @@ test('createRequestInit with baseConfig GET', () => {
     'application/x-www-form-urlencoded;charset=UTF-8',
   )
 })
+
+test('createRequestInit with baseConfig, useBaseConfig = `false`', () => {
+  const formData = new FormData()
+  formData.append('name', 'alex')
+  const { url, requestInit } = createRequestInit({
+    action: 'http://localhost:3000/api/users?',
+    method: 'get',
+    formData,
+    baseConfig: baseConfig,
+    useBaseConfig: false,
+  })
+
+  expect(requestInit.method).toEqual('get')
+  expect(url).toEqual('http://localhost:3000/api/users?name=alex')
+  expect((requestInit.headers as any)['Content-Type']).toEqual(
+    'application/x-www-form-urlencoded;charset=UTF-8',
+  )
+})

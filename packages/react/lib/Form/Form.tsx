@@ -11,6 +11,7 @@ import { useFetch } from '../Hook/useFetch'
  * and `reqBody` will be used as the `body`. So the `reqBody` needs to be a valid JSON string.
  */
 export function Form<DataType, ErrorType>({
+  useBaseConfig,
   method = 'post',
   action = '/',
   encType = 'multipart/form-data',
@@ -19,6 +20,7 @@ export function Form<DataType, ErrorType>({
   body,
   includeSubmitValue = true,
   children,
+  ...props
 }: FormProps<DataType, ErrorType> &
   Omit<
     React.FormHTMLAttributes<HTMLFormElement>,
@@ -43,6 +45,7 @@ export function Form<DataType, ErrorType>({
     transition,
     abortRequest,
   } = useFetch<DataType, ErrorType>({
+    useBaseConfig,
     action,
     method,
     formData: formData.current,
@@ -102,6 +105,7 @@ export function Form<DataType, ErrorType>({
       action={action}
       encType={encType}
       onSubmit={submitHandler}
+      {...props}
     >
       {children({ data, error, status, transition, abort: abortRequest })}
     </form>

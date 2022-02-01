@@ -34,6 +34,7 @@ export function useForm<DataType, ErrorType>(
   /** memoized config */
   const useFetchConfig = React.useMemo<UseFetchParams<DataType, ErrorType>>(
     () => ({
+      useBaseConfig: config.useBaseConfig || true,
       action: config.action || '',
       method: config.method || 'post',
       formData: formData.current || undefined,

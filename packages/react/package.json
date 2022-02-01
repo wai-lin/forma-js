@@ -4,8 +4,9 @@
     "type": "git",
     "url": "https://github.com/wai-lin/forma-js"
   },
+  "license": "MIT",
   "name": "@forma-js/react",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "files": [
     "dist",
     "lib"
@@ -15,7 +16,8 @@
   "typings": "dist/types/main.d.ts",
   "scripts": {
     "build": "vite build && npm run type:gen",
-    "type:gen": "tsc --emitDeclarationOnly --project tsconfig.json --outDir dist/types"
+    "type:gen": "tsc --emitDeclarationOnly --project tsconfig.json --outDir dist/types",
+    "v:bump": "standard-version"
   },
   "dependencies": {
     "react": "^17.0.2",

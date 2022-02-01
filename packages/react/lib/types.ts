@@ -66,6 +66,7 @@ export type ChildrenProps<DataType, ErrorType> = {
 }
 
 export type FormProps<DataType, ErrorType> = {
+  useBaseConfig?: boolean
   action: string
   method: Method
   encType?: EncType
