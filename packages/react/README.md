@@ -188,13 +188,9 @@ function CreateUserForm() {
     method: 'post',
     encType: 'application/json',
   })
-  const createUserFormProps = {
-    ref: createUserForm.ref,
-    onSubmit: createUserForm.onSubmit,
-  }
 
   return (
-    <form {...createUserFormProps}>
+    <form {...createUserForm.getFormProps()}>
       {() => (
         <div>
           <input name="name" type="text" />

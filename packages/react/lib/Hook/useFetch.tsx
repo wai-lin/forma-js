@@ -58,6 +58,21 @@ export function useFetch<DataType, ErrorType>({
   const [transitionState, setTransitionState] =
     React.useState<TransitionState>('idle')
 
+  const requestObj = React.useMemo(
+    () =>
+      createRequestInit({
+        useBaseConfig,
+        baseConfig,
+        action,
+        method,
+        encType,
+        formData,
+        reqBody: body,
+        query,
+      }),
+    [action, baseConfig, body, encType, formData, method, query, useBaseConfig],
+  )
+
   /**
    * fetch request, controller
    */
@@ -78,12 +93,9 @@ export function useFetch<DataType, ErrorType>({
       /**
        * Generate request `headers` and `body`
        */
-      const reqAction = baseConfig.baseUrl
-        ? `${baseConfig.baseUrl}${action}`
-        : action
-      const { url, requestInit } = createRequestInit({
+      const requestObj = createRequestInit({
         useBaseConfig,
-        action: reqAction,
+        action,
         baseConfig,
         method,
         encType,
@@ -101,12 +113,12 @@ export function useFetch<DataType, ErrorType>({
       setTransitionState('idle')
 
       // SECTION: Before Hook
-      hook?.beforeRequest && hook.beforeRequest(requestInit)
+      hook?.beforeRequest && hook.beforeRequest(requestObj.requestInit)
 
       setTransitionState('submitting')
       // Make fetch request
-      fetch(url, {
-        ...requestInit,
+      fetch(requestObj.url, {
+        ...requestObj.requestInit,
         signal,
       })
         .then(async (res) => {
@@ -168,7 +180,19 @@ export function useFetch<DataType, ErrorType>({
       hook?.afterAbort && hook.afterAbort()
       setTransitionState('idle')
     }
-  }, [abort, action, body, encType, formData, hook, method, query, submit])
+  }, [
+    abort,
+    action,
+    baseConfig,
+    body,
+    encType,
+    formData,
+    hook,
+    method,
+    query,
+    submit,
+    useBaseConfig,
+  ])
 
   // Change the first render state to `false` after the first render
   if (firstRender.current) firstRender.current = false
@@ -180,6 +204,7 @@ export function useFetch<DataType, ErrorType>({
   }
 
   return {
+    request: requestObj,
     submit,
     setSubmit,
     abort,

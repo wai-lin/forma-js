@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.2.1
+
+### Patch Changes
+
+- new Hook Form Docs
+
+## 1.2.0
+
+### Minor Changes
+
+- new getFromProps func API
+
 ## 1.1.2
 
 ### Patch Changes

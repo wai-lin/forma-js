@@ -130,13 +130,23 @@ export function createRequestInit({
     ? `${baseConfig.baseUrl}${action}${requestParam}`
     : `${action}${requestParam}`
 
-  if (!useBaseConfig) url = `${action}${requestParam}`
+  let formUrl = baseConfig.baseUrl
+    ? `${baseConfig.baseUrl}${action}`
+    : `${action}`
+
+  if (!useBaseConfig) {
+    url = `${action}${requestParam}`
+    formUrl = `${action}`
+  }
 
   // if requestMethod is not `get`, set `body` to the request init object
   if (requestMethod !== 'get') requestInit.body = body
 
   return {
     url,
+    formUrl,
+    method: requestInit.method as Omit<Method, 'graphql'>,
+    encType: headers['Content-Type'] as EncType,
     requestInit,
   }
 }

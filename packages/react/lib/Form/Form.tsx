@@ -35,6 +35,7 @@ export function Form<DataType, ErrorType>({
   )
 
   const {
+    request,
     submit,
     setSubmit,
     abort,
@@ -101,9 +102,9 @@ export function Form<DataType, ErrorType>({
   return (
     <form
       ref={form}
-      method={method}
-      action={action}
-      encType={encType}
+      method={request.method as string}
+      action={request.formUrl}
+      encType={request.encType}
       onSubmit={submitHandler}
       {...props}
     >

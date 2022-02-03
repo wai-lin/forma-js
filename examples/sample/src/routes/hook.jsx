@@ -11,7 +11,7 @@ export function HookForm() {
     method: 'get',
     encType: 'application/x-www-form-urlencoded',
   })
-  const loginFormProps = { ref: loginForm.ref, onSubmit: loginForm.onSubmit }
+  // const loginFormProps = { ref: loginForm.ref, onSubmit: loginForm.onSubmit }
 
   return (
     <>
@@ -37,7 +37,7 @@ export function HookForm() {
         </ul>
       </div>
 
-      <form {...loginFormProps}>
+      <form {...loginForm.getFormProps()}>
         <JsonPretty
           json={{
             state: loginForm.transition.state,

@@ -46,6 +46,7 @@ export function useForm<DataType, ErrorType>(
   )
 
   const {
+    request,
     submit,
     setSubmit,
     abort,
@@ -100,6 +101,14 @@ export function useForm<DataType, ErrorType>(
     }
   }
 
+  const getFormProps = () => ({
+    ref: form,
+    action: request.formUrl,
+    method: request.method,
+    encType: request.encType,
+    onSubmit: submitHandler,
+  })
+
   return {
     ref: form,
     data,
@@ -108,5 +117,6 @@ export function useForm<DataType, ErrorType>(
     transition,
     onSubmit: submitHandler,
     abort: abortRequest,
+    getFormProps,
   }
 }
