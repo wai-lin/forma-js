@@ -1,5 +1,7 @@
 import * as React from 'react'
 
+export type Headers = { [key: string]: string }
+
 export type Method = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'graphql'
 
 export type EncType =
@@ -71,13 +73,15 @@ export type FormProps<DataType, ErrorType> = {
   method: Method
   encType?: EncType
   query?: string
-  body?: any
+  headers?: Headers
+  body?: { [key: string]: any }
   hook?: LifeCycleFuncs<DataType, ErrorType>
+  transform?: (data: { [key: string]: any }) => any
   includeSubmitValue?: boolean
   children: (props: ChildrenProps<DataType, ErrorType>) => React.ReactNode
 }
 
-export type UseFormReturnType<DataType, ErrorType> = ChildrenProps<
+export type UseForm<DataType, ErrorType> = ChildrenProps<
   DataType,
   ErrorType
 > & {

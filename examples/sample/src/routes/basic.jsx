@@ -30,7 +30,16 @@ export function Basic() {
         </ul>
       </div>
 
-      <Form method="post" action={`http://localhost:4000${requestRoute}`}>
+      <Form
+        method="post"
+        action={`http://localhost:4000${requestRoute}`}
+        encType="application/json"
+        transform={(data) => ({
+          ...data,
+          statusCode: Number(data.statusCode),
+        })}
+        headers={{ authorization: 'Bearer 123' }}
+      >
         {({ data, error, status, transition }) => (
           <>
             <JsonPretty

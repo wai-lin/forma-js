@@ -7,12 +7,16 @@ const ConfigContext = React.createContext<Config>({
   encType: undefined,
 })
 
+/**
+ * @deprecated
+ */
 export const ConfigProvider: React.FC<Config> = ({ children, ...config }) => {
   return (
     <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>
   )
 }
 
+/** @deprecated */
 export function useConfig() {
   return React.useContext(ConfigContext)
 }

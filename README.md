@@ -4,6 +4,31 @@
 
 ---
 
+### Disclaimer
+
+This library is not a replacement of the remix.run's `Form` component. It is to help your old projects migrate to remix.run by familiarizing you team members with the remix's similar `Form` component.
+
+This library also does not mimic the remix.run's Form component which is bind with route transitions and so on. This library is more similar to remix.run's `useFetcher` since this uses `fetch` request and provide component level states.
+
+---
+
+### Fallback Support
+
+If you want your browser to fallback the `fetch` request, you need to avoid using `encType="application/json"` and `method="graphql"` in your form. These two features are fancy add-on features that are not supported by the browser without enabling JavaScript.
+
+> **IN SUMMARY:** If you need to support the use-case of users disabling JavaScript on their browsers,
+> you need to avoid using `encType="application/json"` and `method="graphql"` in your form.
+> Since these two features only work when JavaScript is enabled.
+
+---
+
+### Breaking Changes
+
+- `ConfigProvider` component is deprecated starting from v1.3.0
+  - After asking for an opinion about this library from Kent C. Dodds on his [live-stream](https://youtu.be/BhQHIh9NvSQ?t=1356), my opinion align with his explanation. Instead of using `ConfigProvider`, we should use constant variables like `.env` or `config.js` to store the configuration. And then use it as action baseUrl should be more declarative.
+
+---
+
 ### Installation
 
 ```bash
@@ -16,29 +41,22 @@ yarn add @forma-js/react
 
 ---
 
-### How to run examples
-
-1. clone this repo
-2. run `npm install` (note: npm version `>= v7`)
-3. run both `npm run examples:start` and `npm run examples:serve` in separate tabs
-4. go to `localhost:3000`
-
----
-
 ### Usage
 
-##### Basic Form
+#### Basic Form
 
 ```tsx
 import { Form } from '@forma-js/react'
 
+/**
+ * in your project you should store this url in `.env` file
+ * or separate `config.js` file and import it
+ */
+const baseUrl = 'https://mysecurebackend.com/api'
+
 function LoginForm() {
   return (
-    <Form
-      method="post"
-      action="http://localhost:4000/api/login"
-      encType="application/x-www-form-urlencoded"
-    >
+    <Form method="post" action={`${baseUrl}/login`}>
       {() => (
         <div>
           <input name="email" type="email" />
@@ -51,7 +69,9 @@ function LoginForm() {
 }
 ```
 
-##### Global Config Provider
+---
+
+#### ~~Global Config Provider~~ (deprecated)
 
 `App.tsx`
 
@@ -77,7 +97,7 @@ export function App() {
 ```tsx
 import { Form } from '@forma-js/react'
 
-function CreateUserForm() {
+export function CreateUserForm() {
   return (
     <Form action="/users">
       {() => (
@@ -92,7 +112,9 @@ function CreateUserForm() {
 }
 ```
 
-##### Pending State
+---
+
+#### Pending State
 
 ```tsx
 import { Form } from '@forma-js/react'
@@ -119,7 +141,9 @@ function CreateUserForm() {
 }
 ```
 
-##### Cancelable Form
+---
+
+#### Cancelable Form
 
 ```tsx
 import { Form } from '@forma-js/react'
@@ -144,7 +168,9 @@ function CreateUserForm() {
 }
 ```
 
-##### Form with Error
+---
+
+#### Form with Error
 
 ```tsx
 import { Form } from '@forma-js/react'
@@ -165,7 +191,9 @@ function CreateUserForm() {
 }
 ```
 
-##### Form with Success
+---
+
+#### Form with Success
 
 ```tsx
 import { Form } from '@forma-js/react'
@@ -186,51 +214,65 @@ function CreateUserForm() {
 }
 ```
 
-##### Hook Form
+---
+
+#### Hook Form
 
 ```tsx
 import { useForm } from '@forma-js/react'
 
+const baseUrl = 'https://mysecurebackend.com/api'
+
 function CreateUserForm() {
+  /**
+   * transform and headers need to Memoize in hook form.
+   * otherwise, it will trigger re-render infinitely.
+   * if you don't want to memoize them, you can declare them outside of the react component.
+   */
+  const transform = React.useCallback(
+    (data) => ({ ...data, age: Number(data.age) }),
+    [],
+  )
+  const headers = React.useMemo(() => ({ authorization: 'Bearer 123' }), [])
+
   const createUserForm = useForm({
-    action: '/users',
+    action: `${baseUrl}/users`,
     method: 'post',
     encType: 'application/json',
+    transform,
+    headers,
   })
-  const createUserFormProps = {
-    ref: createUserForm.ref,
-    onSubmit: createUserForm.onSubmit,
-  }
 
   return (
-    <form {...createUserFormProps}>
-      {() => (
-        <div>
-          <input name="name" type="text" />
-          <input name="email" type="email" />
-          <button
-            type="submit"
-            aria-disabled={createUserForm.transition.state === 'submitting'}
-          >
-            Create New User
-          </button>
-        </div>
-      )}
+    <form {...createUserForm.getFormProps()}>
+      <input name="name" type="text" />
+      <input name="email" type="email" />
+      <input name="age" type="number" />
+      <button
+        type="submit"
+        aria-disabled={createUserForm.transition.state === 'submitting'}
+      >
+        Create New User
+      </button>
     </form>
   )
 }
 ```
 
-##### GraphQL Form
+---
+
+#### GraphQL Form
 
 ```tsx
 import { Form } from '@forma-js/react'
+
+const baseUrl = 'https://mysecurebackend.com/api'
 
 function CreateUserForm() {
   return (
     <Form
       method="graphql"
-      action="/users"
+      action={`${baseUrl}/users`}
       query={`
         mutation CreateUser($name: String!, $email: String!) {
           createUser(name: $name, email: $email) {
@@ -253,7 +295,9 @@ function CreateUserForm() {
 }
 ```
 
-##### Get Form Data
+---
+
+#### Get Form Data
 
 ```tsx
 import { Form } from '@forma-js/react'
@@ -296,7 +340,35 @@ function CreateUserForm() {
 }
 ```
 
-##### Life Cycle
+---
+
+#### Post Form Data with Transform (`graphql` and `application/json` only)
+
+```tsx
+import { Form } from '@forma-js/react'
+
+function CreateUserForm() {
+  return (
+    <Form
+      action="/users"
+      encType="application/json"
+      transform={(data) => ({ ...data, age: Number(data.age) })}
+    >
+      {() => (
+        <div>
+          <input name="name" type="text" />
+          <input name="age" type="number" />
+          <button type="submit">Submit</button>
+        </div>
+      )}
+    </Form>
+  )
+}
+```
+
+---
+
+#### Life Cycle
 
 ```tsx
 import { Form } from '@forma-js/react'
@@ -343,6 +415,8 @@ function CreateUserForm() {
 }
 ```
 
+---
+
 ### API
 
 ```tsx
@@ -365,10 +439,11 @@ function useForm<DataType, ErrorType>(
   config: FormProps<DataType, ErrorType>,
 ): UseFormReturnType<DataType, ErrorType>
 
+/** @deprecated */
 const ConfigProvider: React.FC<Config>
 ```
 
-##### Types
+#### Types
 
 ```tsx
 type Method = 'get' | 'post' | 'put' | 'delete' | 'patch' | 'graphql'
@@ -377,12 +452,6 @@ type EncType =
   | 'multipart/form-data'
   | 'application/json'
   | 'application/x-www-form-urlencoded'
-
-interface Config {
-  baseUrl?: string
-  method?: Method
-  encType?: EncType
-}
 
 type TransitionState = 'idle' | 'submitting' | 'error' | 'catch-error'
 
@@ -444,6 +513,7 @@ type FormProps<DataType, ErrorType> = {
   body?: any
   hook?: LifeCycleFuncs<DataType, ErrorType>
   includeSubmitValue?: boolean
+  transform?: (data: { [key: string]: any }) => any
   children: (props: ChildrenProps<DataType, ErrorType>) => React.ReactNode
 }
 

@@ -31,11 +31,49 @@ test('createRequestInit POST with baseConfig', () => {
   expect(requestInit.body?.toString()).toEqual('name=alex')
 })
 
+test('createRequestInit POST with reqBody should merge with formData', () => {
+  const formData = new FormData()
+  formData.append('name', 'alex')
+  const reqBody = { gender: 'male' }
+  const { url, requestInit } = createRequestInit({
+    action: 'http://localhost:4000/api/users',
+    formData,
+    reqBody,
+    baseConfig: emptyBaseConfig,
+  })
+
+  expect(url).toEqual('http://localhost:4000/api/users')
+  expect(requestInit.method).toEqual('post')
+  expect((requestInit.headers as any)['Content-Type']).toEqual(
+    'application/x-www-form-urlencoded;charset=UTF-8',
+  )
+  expect(requestInit.body?.toString()).toEqual('name=alex&gender=male')
+})
+
+test('createRequestInit POST with custom headers', () => {
+  const formData = new FormData()
+  formData.append('name', 'alex')
+  const { url, requestInit } = createRequestInit({
+    action: 'http://localhost:4000/api/users',
+    formData,
+    reqHeaders: { authorization: 'Bearer 123' },
+    baseConfig: emptyBaseConfig,
+  })
+
+  expect(url).toEqual('http://localhost:4000/api/users')
+  expect(requestInit.method).toEqual('post')
+  expect((requestInit.headers as any)['Content-Type']).toEqual(
+    'application/x-www-form-urlencoded;charset=UTF-8',
+  )
+  expect((requestInit.headers as any).authorization).toEqual('Bearer 123')
+  expect(requestInit.body?.toString()).toEqual('name=alex')
+})
+
 test('createRequestInit GET with baseConfig', () => {
   const formData = new FormData()
   formData.append('name', 'alex')
   const { url, requestInit } = createRequestInit({
-    action: '/users?',
+    action: '/users',
     method: 'get',
     formData,
     baseConfig,
@@ -87,6 +125,30 @@ test('createRequestInit GraphQL with emptyBaseConfig', () => {
   expect(JSON.parse(requestInit.body as string)).toEqual({
     query: `{ users { id } }`,
     variables: { name: 'alex' },
+  })
+})
+
+test('createRequestInit GraphQL with emptyBaseConfig, transform variables', () => {
+  const formData = new FormData()
+  formData.append('name', 'alex')
+  formData.append('age', '20')
+  const { url, requestInit } = createRequestInit({
+    action: 'http://localhost:3000/graphql',
+    method: 'graphql',
+    formData,
+    query: `{ users { id } }`,
+    baseConfig: emptyBaseConfig,
+    transform: (variables) => ({ ...variables, age: Number(variables.age) }),
+  })
+
+  expect(url).toEqual('http://localhost:3000/graphql')
+  expect(requestInit.method).toEqual('post')
+  expect((requestInit.headers as any)['Content-Type']).toEqual(
+    'application/json;charset=UTF-8',
+  )
+  expect(JSON.parse(requestInit.body as string)).toEqual({
+    query: `{ users { id } }`,
+    variables: { name: 'alex', age: 20 },
   })
 })
 

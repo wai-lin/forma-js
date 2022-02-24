@@ -1,13 +1,16 @@
-import type { Config, EncType, Method } from '../types'
+import type { Config, EncType, Headers, Method } from '../types'
 
 interface CreateRequestInitParams {
+  /** @deprecated */
   useBaseConfig?: boolean
   action: string
   baseConfig: Config
   method?: Method
   encType?: EncType
   formData: FormData
-  reqBody?: string
+  reqHeaders?: Headers
+  reqBody?: { [key: string]: any }
+  transform?: (data: { [key: string]: any }) => any
   query?: string
 }
 
@@ -25,11 +28,13 @@ export function createRequestInit({
   method,
   encType,
   formData,
+  reqHeaders,
   reqBody,
+  transform,
   query = '',
 }: CreateRequestInitParams) {
   // set default `headers` value
-  const headers: any = {}
+  const headers: Headers = reqHeaders || {}
   // set default `body` value as `formData`
   let body: FormData | string | undefined = formData
   // define request params
@@ -45,8 +50,9 @@ export function createRequestInit({
       ? 'post'
       : method === undefined && baseConfig.method === 'graphql'
       ? 'post'
-      : method || baseConfig.method || 'get'
+      : method || baseConfig.method || 'post'
 
+  // TODO: remove, deprecated
   if (!useBaseConfig) {
     reqEncType = encType || 'application/x-www-form-urlencoded'
     requestMethod = method || 'post'
@@ -63,6 +69,9 @@ export function createRequestInit({
     for (const entity of formData.entries()) {
       query.append(entity[0], entity[1].toString())
     }
+    for (const key in reqBody) {
+      query.append(key, reqBody[key])
+    }
     body = query
   }
 
@@ -73,21 +82,15 @@ export function createRequestInit({
    */
   if (reqEncType === 'application/json') {
     headers['Content-Type'] = `${reqEncType};charset=UTF-8`
-    const json: any = {}
+    let json: any = {}
     for (const entity of formData.entries()) {
       json[entity[0]] = entity[1].toString()
     }
+    for (const key in reqBody) {
+      json[key] = reqBody[key]
+    }
+    if (transform) json = transform(json)
     body = JSON.stringify(json)
-  }
-
-  /**
-   * if `reqBody` is not empty,
-   * 1. set headers `Context-Type` to `application/json`
-   * 2. set `body` to `reqBody`
-   */
-  if (reqBody !== undefined) {
-    headers['Context-Type'] = 'application/json;charset=UTF-8'
-    body = reqBody
   }
 
   /**
@@ -97,10 +100,14 @@ export function createRequestInit({
    */
   if (method === 'graphql') {
     headers['Content-Type'] = 'application/json;charset=UTF-8'
-    const variables: any = {}
+    let variables: any = {}
     for (const entity of formData.entries()) {
       variables[entity[0]] = entity[1].toString()
     }
+    for (const key in reqBody) {
+      variables[key] = reqBody[key]
+    }
+    if (transform) variables = transform(variables)
     body = JSON.stringify({ query, variables })
   }
 
@@ -115,6 +122,9 @@ export function createRequestInit({
     for (const entity of formData.entries()) {
       params.append(entity[0], entity[1].toString())
     }
+    for (const key in reqBody) {
+      params.append(key, reqBody[key])
+    }
     requestParam = params.toString()
   }
 
@@ -125,17 +135,21 @@ export function createRequestInit({
     headers,
   }
 
+  const isSearchParamNeeded = !/\?$/g.test(action) && method === 'get'
+  const searchParam = isSearchParamNeeded ? '?' : ''
+
   /** Request URL */
   let url = baseConfig.baseUrl
-    ? `${baseConfig.baseUrl}${action}${requestParam}`
-    : `${action}${requestParam}`
+    ? `${baseConfig.baseUrl}${action}${searchParam}${requestParam}`
+    : `${action}${searchParam}${requestParam}`
 
   let formUrl = baseConfig.baseUrl
     ? `${baseConfig.baseUrl}${action}`
     : `${action}`
 
+  // TODO: remove, deprecated
   if (!useBaseConfig) {
-    url = `${action}${requestParam}`
+    url = `${action}${searchParam}${requestParam}`
     formUrl = `${action}`
   }
 

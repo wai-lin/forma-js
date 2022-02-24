@@ -6,12 +6,18 @@ import { useForm } from '@forma-js/react'
 export function HookForm() {
   const [requestRoute, setRequestRoute] = React.useState('/random?')
 
+  const transform = React.useCallback((data) => {
+    data.statusCode = Number(data.statusCode)
+    return data
+  }, [])
+  const headers = React.useMemo(() => ({ authorization: 'Bearer 123' }), [])
   const loginForm = useForm({
     action: `http://localhost:4000${requestRoute}`,
-    method: 'get',
-    encType: 'application/x-www-form-urlencoded',
+    method: 'post',
+    encType: 'application/json',
+    transform,
+    headers,
   })
-  // const loginFormProps = { ref: loginForm.ref, onSubmit: loginForm.onSubmit }
 
   return (
     <>

@@ -11,6 +11,7 @@
     "test": "jest --passWithNoTests",
     "test:dev": "jest --passWithNoTests --watch",
     "prebuild": "npm run lint && npm run test",
+    "cloneReadme": "rm ./packages/react/README.md || true && cp ./README.md ./packages/react/",
     "build": "npm run build -w @forma-js/react",
     "example:start": "npm run dev -w @examples/sample",
     "example:serve": "npm run start -w @examples/server",

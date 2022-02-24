@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { useFetch, UseFetchParams } from './useFetch'
-import { FormProps, UseFormReturnType } from '../types'
+import { FormProps, UseForm } from '../types'
 
 /**
  * hook to bind to the `form` element
@@ -10,9 +10,8 @@ import { FormProps, UseFormReturnType } from '../types'
  *
  * ```tsx
  * const loginForm = useForm({...config})
- * const loginFormProps = { ref: loginForm.ref, onSubmit: loginForm.onSubmit }
  * return (
- *   <form {...loginFormProps}>
+ *   <form {...loginForm.getFormProps()}>
  *     <input name="email" type="email" />
  *     <input name="password" type="password" />
  *     <button type="submit">Submit</button>
@@ -22,7 +21,7 @@ import { FormProps, UseFormReturnType } from '../types'
  */
 export function useForm<DataType, ErrorType>(
   config: FormProps<DataType, ErrorType>,
-): UseFormReturnType<DataType, ErrorType> {
+): UseForm<DataType, ErrorType> {
   /** initialize formRef */
   const form = React.useRef<HTMLFormElement | null>(null)
 
@@ -41,6 +40,8 @@ export function useForm<DataType, ErrorType>(
       encType: config.encType || 'application/x-www-form-urlencoded',
       query: config.query || '',
       hook: config.hook || undefined,
+      headers: config.headers || undefined,
+      transform: config.transform || undefined,
     }),
     [config],
   )

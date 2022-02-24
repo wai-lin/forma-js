@@ -1,5 +1,6 @@
 import type {
   EncType,
+  Headers,
   LifeCycleFuncs,
   Method,
   ResponseParam,
@@ -12,13 +13,16 @@ import { createRequestInit } from '../utils/createRequestInit'
 import { useConfig } from '../ConfigProvider/ConfigProvider'
 
 export interface UseFetchParams<DataType, ErrorType> {
+  /** @deprecated */
   useBaseConfig?: boolean
   action: string
   method: Method
   encType: EncType
   formData: FormData
-  body?: string
+  headers?: Headers
+  body?: { [key: string]: any }
   query?: string
+  transform?: (data: { [key: string]: any }) => any
   hook?: LifeCycleFuncs<DataType, ErrorType>
 }
 
@@ -32,14 +36,17 @@ export function useFetch<DataType, ErrorType>({
   method,
   formData,
   encType = 'multipart/form-data',
+  headers = undefined,
   body = undefined,
   query,
+  transform,
   hook,
 }: UseFetchParams<DataType, ErrorType>) {
   const firstRender = React.useRef(true)
 
   /**
    * base config
+   * @deprecated
    */
   const baseConfig = useConfig()
 
@@ -69,8 +76,21 @@ export function useFetch<DataType, ErrorType>({
         formData,
         reqBody: body,
         query,
+        reqHeaders: headers,
+        transform,
       }),
-    [action, baseConfig, body, encType, formData, method, query, useBaseConfig],
+    [
+      action,
+      baseConfig,
+      body,
+      encType,
+      formData,
+      headers,
+      method,
+      query,
+      transform,
+      useBaseConfig,
+    ],
   )
 
   /**
@@ -102,6 +122,8 @@ export function useFetch<DataType, ErrorType>({
         formData,
         reqBody: body,
         query,
+        reqHeaders: headers,
+        transform,
       })
 
       /**
@@ -187,10 +209,12 @@ export function useFetch<DataType, ErrorType>({
     body,
     encType,
     formData,
+    headers,
     hook,
     method,
     query,
     submit,
+    transform,
     useBaseConfig,
   ])
 

@@ -18,6 +18,8 @@ export function Form<DataType, ErrorType>({
   query = '',
   hook,
   body,
+  headers,
+  transform,
   includeSubmitValue = true,
   children,
   ...props
@@ -54,6 +56,8 @@ export function Form<DataType, ErrorType>({
     query,
     hook,
     body,
+    headers,
+    transform,
   })
 
   /** onSubmit handler */

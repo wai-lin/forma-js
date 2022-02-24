@@ -8,7 +8,7 @@ import {
   ChildrenProps,
   Config,
   FormProps,
-  UseFormReturnType,
+  UseForm,
 } from './types'
 
 import { ConfigProvider } from './ConfigProvider/ConfigProvider'
@@ -27,5 +27,5 @@ export type {
   ChildrenProps,
   Config,
   FormProps,
-  UseFormReturnType,
+  UseForm as UseFormReturnType,
 }
