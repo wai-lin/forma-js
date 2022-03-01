@@ -90,10 +90,10 @@ export type UseForm<DataType, ErrorType> = ChildrenProps<
   /** @deprecated use `getFormProps()` instead */
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
   getFormProps: () => {
-    ref: React.MutableRefObject<HTMLFormElement | null>
+    ref: any
     action: string
-    method: Omit<Method, 'graphql'>
-    encType: EncType
+    method: string
+    encType: string
     onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
   }
 }

@@ -103,10 +103,10 @@ export function useForm<DataType, ErrorType>(
   }
 
   const getFormProps = () => ({
-    ref: form,
-    action: request.formUrl,
-    method: request.method,
-    encType: request.encType,
+    ref: form as any,
+    action: request.formUrl as string,
+    method: request.method as string,
+    encType: request.encType as string,
     onSubmit: submitHandler,
   })
 
