@@ -20,7 +20,7 @@ import { FormProps, UseForm } from '../types'
  * ```
  */
 export function useForm<DataType, ErrorType>(
-  config: FormProps<DataType, ErrorType>,
+  config: Omit<FormProps<DataType, ErrorType>, 'children'>,
 ): UseForm<DataType, ErrorType> {
   /** initialize formRef */
   const form = React.useRef<HTMLFormElement | null>(null)
