@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/wai-lin/forma-js/compare/v1.3.0...v1.3.1) (2022-03-01)
+
+
+### Bug Fixes
+
+* **useform:** remove children type from the useForm hook ([2ff2f99](https://github.com/wai-lin/forma-js/commit/2ff2f9921f8d5da3f31ae51e8a175a2038bc5b8b))
+
 ## [1.3.0](https://github.com/wai-lin/forma-js/compare/v1.1.1...v1.3.0) (2022-02-24)
 
 
