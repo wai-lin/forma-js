@@ -155,7 +155,7 @@ export function useFetch<DataType, ErrorType>({
             // SECTION: graphql
             if (method === 'graphql') {
               const data = (response.data as any).data
-              const errors = (response.data as any).errors
+              const errors = response.data as any
               setData(data)
               setError(errors)
 
