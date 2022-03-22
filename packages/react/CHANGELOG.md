@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.4](https://github.com/wai-lin/forma-js/compare/v1.3.3...v1.3.4) (2022-03-22)
+
+
+### Bug Fixes
+
+* **use-fetch:** error returning null on response ([ba1ae58](https://github.com/wai-lin/forma-js/commit/ba1ae5863d6f1612ce8ba2dd00d2e0a93796b1dd))
+
 ### [1.3.3](https://github.com/wai-lin/forma-js/compare/v1.3.2...v1.3.3) (2022-03-01)
 
 
