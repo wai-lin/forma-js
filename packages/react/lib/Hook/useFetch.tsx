@@ -155,7 +155,7 @@ export function useFetch<DataType, ErrorType>({
             // SECTION: graphql
             if (method === 'graphql') {
               const data = (response.data as any).data
-              const errors = response.data as any
+              const errors = (response.data as any).data
               setData(data)
               setError(errors)
 
@@ -175,9 +175,9 @@ export function useFetch<DataType, ErrorType>({
             hook?.onError &&
               hook.onError({
                 ...response,
-                data: response.data as unknown as ErrorType,
+                data: (response.data as any).data as unknown as ErrorType,
               })
-            setError(response.data as unknown as ErrorType)
+            setError((response.data as any).data as unknown as ErrorType)
             setTransitionState('error')
           }
 

@@ -4,6 +4,12 @@
 
 ---
 
+# Announcement!
+
+In Mar 23rd, 2022(I'm from South-east Asia so timeline might be a bit different for you ⏱), `remix` announced that next `react-router` release will also be included with `remix's` route based data fetching, Form, useFetcher and other cool features. Therefore, this library will be archived after a few weeks of `react-router` releasing with these cool features. Since this library's purpose is to kind of mimic `remix`'s `Form` component and `useFetcher` hook, it will not be necessary anymore when `react-router` releases with these features. Hope you have a smooth transition to `remix` or `react-router` in new release.
+
+---
+
 ### Disclaimer
 
 This library is not a replacement of the remix.run's `Form` component. It is to help your old projects migrate to remix.run by familiarizing you team members with the remix's similar `Form` component.
